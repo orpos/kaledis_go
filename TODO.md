@@ -1,0 +1,1 @@
+* migrate it to a custom kaledis love-android build

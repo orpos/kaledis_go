@@ -1,0 +1,31 @@
+"$schema" = "./kaledis.schema.json"
+modules = [
+  "Audio",
+  "Data",
+  "Event",
+  "Font",
+  "Graphics",
+  "Image",
+  "Joystick",
+  "Keyboard",
+  "Math",
+  "Mouse",
+  "Physics",
+  "Sound",
+  "System",
+  "Thread",
+  "Timer",
+  "Touch",
+  "Video",
+  "Window"
+]
+
+[project]
+name = "kaledis_go"
+love_path = "C:/Program Files/LOVE"
+src_path = "src"
+
+[window]
+title = "Untitled"
+
+[audio]
