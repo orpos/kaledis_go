@@ -9,7 +9,7 @@ return function(ip: string)
 	local center_x = w
 	local center_y = h
 
-	local text = "Put this ip in kaledis: " .. ip .. ":9532"
+	local text = "Put this ip in kaledis: " .. ip
 
 	local x_pos = x + center_x - font:getWidth(text)
 	local y_pos = y + center_y - font:getHeight()

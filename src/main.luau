@@ -96,6 +96,37 @@ local error_draw = require("./error")
 local h_cn = false
 local is_loading_new_version = false
 
+local function ensureDirectories(path)
+	local parts = {}
+	for part in path:gmatch("[^/]+") do
+		table.insert(parts, part)
+	end
+
+	local current = ""
+	for i = 1, #parts - 1 do
+		current = current == "" and parts[i] or (current .. "/" .. parts[i])
+		love.filesystem.createDirectory(current)
+	end
+end
+
+local function cleanDirectory(path)
+	for _, item in ipairs(love.filesystem.getDirectoryItems(path)) do
+		local fullPath = path .. "/" .. item
+		local info = love.filesystem.getInfo(fullPath)
+
+		if info then
+			if info.type == "directory" then
+				cleanDirectory(fullPath)
+			end
+			love.filesystem.remove(fullPath)
+		end
+	end
+end
+
+pool:on("clean_assets", function(message: string)
+	cleanDirectory(love.filesystem.getSaveDirectory())
+end)
+
 pool:on("receiving", function(message)
 	is_loading_new_version = true
 end)
@@ -108,6 +139,27 @@ pool:on("has_server", function(has: string)
 end)
 
 local should_render_error = false
+
+pool:on("asset_upload", function(message)
+	local path, data = message:match("([^\n]*)\n(.+)")
+
+	ensureDirectories(path)
+
+	local file, err = love.filesystem.newFile(path, "w")
+	if err then
+		report_error(err)
+		should_render_error = true
+		return
+	end
+
+	local ok, w_err = file:write(data)
+	if not ok then
+		report_error(w_err)
+		should_render_error = true
+		return
+	end
+end)
+
 pool:on("load", function(code: string)
 	is_loading_new_version = false
 	should_render_error = false
@@ -116,6 +168,7 @@ pool:on("load", function(code: string)
 	if not ok then
 		print("Failed to load chunk")
 		report_error(err)
+		should_render_error = true
 	end
 end)
 
