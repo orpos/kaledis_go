@@ -4,4 +4,4 @@
 # New tools can be added by running `rokit add <tool>` in a terminal.
 
 [tools]
-kaledis = "orpos/kaledis@2.2.0"
+kaledis = "orpos/kaledis@3.0.1"
