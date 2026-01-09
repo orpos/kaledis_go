@@ -6,3 +6,5 @@
 </div>
 
 This is the android dev hmr envinronment. You can use this in kaledis to develop Love2d applications using luau targeting the android plataform
+
+<video src="assets/output.mp4">
